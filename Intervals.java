@@ -185,13 +185,13 @@ public class Intervals {
     }
 
     private static int checkSemitone(String acc, String order, int interval) {
-        if (order.equals(ORDER_ASC) && acc.equals(Accidentals.SHARP)) {
+        if (order.equals(ORDER_ASC) && acc.equals(Accidentals.SHARP.getAccidental())) {
             interval--;
-        } else if (order.equals(ORDER_ASC) && acc.equals(Accidentals.FLAT)) {
+        } else if (order.equals(ORDER_ASC) && acc.equals(Accidentals.FLAT.getAccidental())) {
             interval++;
-        } else if (order.equals(ORDER_DSC) && acc.equals(Accidentals.SHARP)) {
+        } else if (order.equals(ORDER_DSC) && acc.equals(Accidentals.SHARP.getAccidental())) {
             interval++;
-        } else if (order.equals(ORDER_DSC) && acc.equals(Accidentals.FLAT)) {
+        } else if (order.equals(ORDER_DSC) && acc.equals(Accidentals.FLAT.getAccidental())) {
             interval--;
         }
         return interval;
@@ -200,27 +200,27 @@ public class Intervals {
     private static String checkNote(int interval, int semitone, String resultNote, String order) {
         if (interval - semitone == 2) {
             if (order.equals(ORDER_ASC)) {
-                resultNote += Accidentals.DBLFLAT;
+                resultNote += Accidentals.DBLFLAT.getAccidental();
             } else {
-                resultNote += Accidentals.DBLSHARP;
+                resultNote += Accidentals.DBLSHARP.getAccidental();
             }
         } else if (interval - semitone == 1) {
             if (order.equals(ORDER_ASC)) {
-                resultNote += Accidentals.FLAT;
+                resultNote += Accidentals.FLAT.getAccidental();
             } else {
-                resultNote += Accidentals.SHARP;
+                resultNote += Accidentals.SHARP.getAccidental();
             }
         } else if (interval - semitone == -1) {
             if (order.equals(ORDER_ASC)) {
-                resultNote += Accidentals.SHARP;
+                resultNote += Accidentals.SHARP.getAccidental();
             } else {
-                resultNote += Accidentals.FLAT;
+                resultNote += Accidentals.FLAT.getAccidental();
             }
         } else if (interval - semitone == -2) {
             if (order.equals(ORDER_ASC)) {
-                resultNote += Accidentals.DBLSHARP;
+                resultNote += Accidentals.DBLSHARP.getAccidental();
             } else {
-                resultNote += Accidentals.DBLFLAT;
+                resultNote += Accidentals.DBLFLAT.getAccidental();
             }
         }
         return resultNote;
@@ -314,32 +314,32 @@ public class Intervals {
     }
 
     private static int checkSemitoneAsc(int interval, String accidentalsStart, String accidentalsFinish) {
-        if (accidentalsStart.equals(Accidentals.SHARP) || accidentalsFinish.equals(Accidentals.FLAT)) {
+        if (accidentalsStart.equals(Accidentals.SHARP.getAccidental()) || accidentalsFinish.equals(Accidentals.FLAT.getAccidental())) {
             interval--;
         }
-        if (accidentalsStart.equals(Accidentals.FLAT) || accidentalsFinish.equals(Accidentals.SHARP)) {
+        if (accidentalsStart.equals(Accidentals.FLAT.getAccidental()) || accidentalsFinish.equals(Accidentals.SHARP.getAccidental())) {
             interval++;
         }
-        if (accidentalsStart.equals(Accidentals.DBLSHARP) || accidentalsFinish.equals(Accidentals.DBLFLAT)) {
+        if (accidentalsStart.equals(Accidentals.DBLSHARP.getAccidental()) || accidentalsFinish.equals(Accidentals.DBLFLAT.getAccidental())) {
             interval = interval - 2;
         }
-        if (accidentalsStart.equals(Accidentals.DBLFLAT) || accidentalsFinish.equals(Accidentals.DBLSHARP)) {
+        if (accidentalsStart.equals(Accidentals.DBLFLAT.getAccidental()) || accidentalsFinish.equals(Accidentals.DBLSHARP.getAccidental())) {
             interval = interval + 2;
         }
         return interval;
     }
 
     private static int checkSemitoneDsc(int interval, String accidentalsStart, String accidentalsFinish) {
-        if (accidentalsStart.equals(Accidentals.SHARP) || accidentalsFinish.equals(Accidentals.FLAT)) {
+        if (accidentalsStart.equals(Accidentals.SHARP.getAccidental()) || accidentalsFinish.equals(Accidentals.FLAT.getAccidental())) {
             interval++;
         }
-        if (accidentalsStart.equals(Accidentals.FLAT) || accidentalsFinish.equals(Accidentals.SHARP)) {
+        if (accidentalsStart.equals(Accidentals.FLAT.getAccidental()) || accidentalsFinish.equals(Accidentals.SHARP.getAccidental())) {
             interval--;
         }
-        if (accidentalsStart.equals(Accidentals.DBLSHARP) || accidentalsFinish.equals(Accidentals.DBLFLAT)) {
+        if (accidentalsStart.equals(Accidentals.DBLSHARP.getAccidental()) || accidentalsFinish.equals(Accidentals.DBLFLAT.getAccidental())) {
             interval = interval + 2;
         }
-        if (accidentalsStart.equals(Accidentals.DBLFLAT) || accidentalsFinish.equals(Accidentals.DBLSHARP)) {
+        if (accidentalsStart.equals(Accidentals.DBLFLAT.getAccidental()) || accidentalsFinish.equals(Accidentals.DBLSHARP.getAccidental())) {
             interval = interval - 2;
         }
         return interval;
@@ -375,18 +375,19 @@ public class Intervals {
                     || nameAccidentals.get().equals(Accidentals.DBLFLAT)) {
                 throw new Exception("Note is wrong! Please, can you put another value!");
             }
-        }
-        String noteStart = param[0].substring(0, 1);
-        String accidentalsStart = param[0].substring(1);
-        String noteFinish = param[1].substring(0, 1);
-        String accidentalsFinish = param[1].substring(1);
-        Optional<Accidentals> nameAccidentalsStart = Arrays.stream(Accidentals.values())
-                .filter(name -> name.getAccidental().equals(accidentalsStart)).findFirst();
-        Optional<Accidentals> nameAccidentalsFinish = Arrays.stream(Accidentals.values()
-        ).filter(name -> name.getAccidental().equals(accidentalsFinish)).findFirst();
-        if (initNotes().get(noteStart) == null || !nameAccidentalsStart.isPresent()
-                || !nameAccidentalsFinish.isPresent() || initNotes().get(noteFinish) == null) {
-            throw new Exception("Note is wrong! Please, can you put another value!");
+        }else if(menuItem == 2) {
+            String noteStart = param[0].substring(0, 1);
+            String accidentalsStart = param[0].substring(1);
+            String noteFinish = param[1].substring(0, 1);
+            String accidentalsFinish = param[1].substring(1);
+            Optional<Accidentals> nameAccidentalsStart = Arrays.stream(Accidentals.values())
+                    .filter(name -> name.getAccidental().equals(accidentalsStart)).findFirst();
+            Optional<Accidentals> nameAccidentalsFinish = Arrays.stream(Accidentals.values()
+            ).filter(name -> name.getAccidental().equals(accidentalsFinish)).findFirst();
+            if (initNotes().get(noteStart) == null || !nameAccidentalsStart.isPresent()
+                    || !nameAccidentalsFinish.isPresent() || initNotes().get(noteFinish) == null) {
+                throw new Exception("Note is wrong! Please, can you put another value!");
+            }
         }
     }
 
